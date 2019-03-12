@@ -1,10 +1,15 @@
 package com.ics.admin.hotelapp;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -16,13 +21,32 @@ import android.widget.ProgressBar;
 public class MainActivity extends AppCompatActivity {
     private WebView webpage;
     private ProgressBar progressBar;
-
+    public ProgressDialog progress_initial;
+    AlertDialog Network_dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progress_initial = new ProgressDialog(this);
+        getSupportActionBar().hide();
         int vc = Color.parseColor("#feca01");
-
+        if(!isNetworkConnected())
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                   finish();
+                }
+            });
+            builder.create();
+             Network_dialog = builder.create();
+            Network_dialog.setCancelable(false);
+            Network_dialog.setTitle("Please connect to internet");
+            Network_dialog.show();
+        }else{
+            progress_initial.show();
+        }
 
     /*    webpage = (WebView) findViewById(R.id.webpage);
         webpage.setWebViewClient(new MyBrowser());
@@ -77,23 +101,24 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-
-
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
             }
-
             @Override
             public void onPageFinished(WebView view, String url) {
-
                 progressBar.setVisibility(View.GONE);
+                progress_initial.dismiss();
             }
 
         });
 
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
 
