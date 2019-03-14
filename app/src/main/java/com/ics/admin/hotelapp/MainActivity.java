@@ -122,7 +122,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        if (webpage.canGoBack()) {
+            webpage.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
   /*  private class MyBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
