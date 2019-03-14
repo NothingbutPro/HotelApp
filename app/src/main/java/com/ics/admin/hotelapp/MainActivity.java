@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         webpage.getSettings().setJavaScriptEnabled(true);
         webpage.getSettings().setSupportZoom(true);
         webpage.getSettings().setBuiltInZoomControls(true);
-        webpage.loadUrl("http://saibabacollege.com/Hotel/");
+        webpage.loadUrl("http://www.rooms.buzybeds.com/");
 
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setMax(100);
