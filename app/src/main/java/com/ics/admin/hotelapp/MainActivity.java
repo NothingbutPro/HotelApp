@@ -41,6 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private ValueCallback<Uri> mUploadMessage;
     private final static int FILECHOOSER_RESULTCODE=1;
     private Uri imageUri;
-    private ValueCallback<Uri> uploadMsg;
+
+    WebView webView;
 
 
     @Override
@@ -100,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setMax(100);
         progressBar.setProgress(1);
+        //swapnil sir code
+
+        //
         if(webpage.getSettings().getAllowFileAccess())
         {
             Toast.makeText(this, "its true", Toast.LENGTH_SHORT).show();
@@ -246,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
     }
 
 
@@ -271,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
 
     //----------------------------
     private void showAttachmentDialog() {
-        this.mUploadMessage = uploadMsg;
+//        this.mUploadMessage = uploadMsg;
 
         File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TestApp");
         if (!imageStorageDir.exists()) {
