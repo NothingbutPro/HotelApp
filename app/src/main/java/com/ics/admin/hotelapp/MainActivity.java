@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                         if(printcount >=2)
                         {
                             createWebPagePrint(view);
+
                         }
                         // Save the job object for later status checking
 
@@ -478,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
         PrintAttributes.Builder builder = new PrintAttributes.Builder();
         builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
         PrintJob printJob = printManager.print(jobName, printAdapter, builder.build());
-
+         printcount=0;
         if(printJob.isCompleted()){
             Toast.makeText(getApplicationContext(),"print_complete", Toast.LENGTH_LONG).show();
         }
