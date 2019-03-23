@@ -30,6 +30,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -85,6 +86,19 @@ public class test extends AppCompatActivity {
             }
             // Save the job object for later status checking
         }
+        @JavascriptInterface
+        public void yourJSInterfaceName(String result) {
+            Toast.makeText(test.this, "Result is"+result.toString(), Toast.LENGTH_SHORT).show();
+            if (result.equals("printDiv")) {
+                Toast.makeText(test.this, "test success", Toast.LENGTH_SHORT).show();
+                // defined
+            } else {
+                // not defined
+            }
+        }
+//        private void checkJSFunction() {
+//            webpage.loadUrl("javascript:yourJSInterfaceName.onLoaded(typeof printDiv)");
+//        }
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
             if (test.this.mUMA != null) {
                 test.this.mUMA.onReceiveValue(null);
@@ -232,6 +246,7 @@ public class test extends AppCompatActivity {
         webpage.getSettings().setAllowFileAccess(true);
         webpage.getSettings().setAllowContentAccess(true);
         webpage.getSettings().supportZoom();
+        webpage.getSettings().setDomStorageEnabled(true);
 //        //
 //        webpage.loadUrl("http://www.rooms.buzybeds.com/");
 
@@ -254,21 +269,32 @@ public class test extends AppCompatActivity {
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                Toast.makeText(test.this, "message is"+message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "result is"+result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "message is"+message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "message is"+message, Toast.LENGTH_SHORT).show();
+
                 return super.onJsAlert(view, url, message, result);
             }
 
             @Override
             public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+                Toast.makeText(test.this, "result is"+result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "message"+message, Toast.LENGTH_SHORT).show();
                 return super.onJsConfirm(view, url, message, result);
             }
 
             @Override
             public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                Toast.makeText(test.this, "result is"+result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "message"+message, Toast.LENGTH_SHORT).show();
                 return super.onJsPrompt(view, url, message, defaultValue, result);
             }
 
             @Override
             public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+                Toast.makeText(test.this, "result is"+result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "message"+message, Toast.LENGTH_SHORT).show();
                 return super.onJsBeforeUnload(view, url, message, result);
             }
 
@@ -309,7 +335,12 @@ public class test extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 Toast.makeText(test.this, ""+url, Toast.LENGTH_SHORT).show();
                 Log.e("the usrl" , ""+url);
-
+                if(url.equals("http://www.rooms.buzybeds.com/Booking/Reciept/18"))
+                {
+                    Toast.makeText(test.this, "got url"+url, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(test.this, "exactly not now", Toast.LENGTH_SHORT).show();
+                }
                 //   showAttachmentDialog();
 
 
@@ -333,12 +364,14 @@ public class test extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
+                Toast.makeText(test.this, "Click has been performed", Toast.LENGTH_SHORT).show();
                 return true;
             }
             @SuppressLint("JavascriptInterface")
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onPageFinished(WebView view, String url) {
+               webpage.loadUrl("javascript:printDiv('invoice');");
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -349,7 +382,7 @@ public class test extends AppCompatActivity {
                 {
                     public void performClick()
                     {
-                        //   Toast.makeText(MainActivity.this, "Click has been performed", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(test.this, "Click has been performed", Toast.LENGTH_SHORT).show();
                         // Deal with a click on the OK button
                     }
                 }, "ok");
@@ -359,6 +392,7 @@ public class test extends AppCompatActivity {
             }
 
         });
+
     }
 
     private File createImageFile() throws IOException {
