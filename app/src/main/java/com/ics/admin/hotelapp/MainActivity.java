@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter();
                 String jobName = getString(R.string.app_name) + " Document";
                 PrintAttributes.Builder builder = new PrintAttributes.Builder();
-                builder.setMediaSize(PrintAttributes.MediaSize.ISO_A5);
+                builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
                 PrintJob printJob = printManager.print(jobName, printAdapter, builder.build());
 
                 if(printJob.isCompleted()){
@@ -229,8 +229,28 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
-                    progressBar.setVisibility(View.VISIBLE);
                     progress_initial.show();
+                    if(!isNetworkConnected())
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                        //        Toast.makeText(MainActivity.this, "All set ", Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        });
+                        builder.create();
+                        Network_dialog = builder.create();
+                        Network_dialog.setCancelable(false);
+                        Network_dialog.setTitle("Please connect to internet");
+                        Network_dialog.show();
+                    }else{
+                        //Toast.makeText(this, "Soing off", Toast.LENGTH_SHORT).show();
+
+                    }
+                    progressBar.setVisibility(View.VISIBLE);
+                    progress_initial.dismiss();
                 //    Toast.makeText(MainActivity.this, ""+url, Toast.LENGTH_SHORT).show();
                     Log.e("the usrl" , ""+url);
 
@@ -267,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }, "ok");
                     //   createWebPagePrint(view);
-                    progressBar.setVisibility(View.GONE);
-                    progress_initial.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    progress_initial.dismiss();
                     if(url.startsWith("http://www.rooms.buzybeds.com/Booking/Reciept"))
                     {
                         printcount = printcount+1;
@@ -518,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
     //==========================
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        Toast.makeText(this, "Connected to internet", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Connected to internet", Toast.LENGTH_SHORT).show();
         return cm.getActiveNetworkInfo() != null;
     }
 
